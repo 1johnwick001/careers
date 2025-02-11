@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- For Registration Of the Organisation For Employers Login -->
+{% if user.role == "2" and not user.organisation %}
+<div class="modal fade show" id="organizationModal" tabindex="-1" aria-labelledby="organizationModalLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="organizationModalLabel">Organization Registration Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You need to register your organization before you can post jobs.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'accounts:employer_organisation_resgister' %}" class="btn btn-primary">
+                    Register Organization
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Later</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show"></div>
+{% endif %}
+
+<!-- For Registration Of the User's Job Seeker Profile  -->
+{% if user.role == "3" and not user.job_seeker_profile %}
+<div class="modal fade" id="JobSeekerModal" tabindex="-1" aria-labelledby="organizationModalLabel" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="organizationModalLabel">Your Job Seeker Profile Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>⚠️ You need to create a Job Seeker Profile before you can apply for jobs!</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'accounts:jobseeker_profile_create' %}" class="btn btn-primary">
+                    Create Profile
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Later</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
+
+            {% comment %} <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboards</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div> {% endcomment %}
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card overflow-hidden">
+            <div class="bg-primary bg-soft">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="text-primary p-3">
+                            <h5 class="text-primary">Welcome! {{user.username}}</h5>
+                            <p>Career's Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="col-5 align-self-end">
+                        {% if user.user_image %}
+                        
+                            <img src="{{user.user_image.url}}" alt="{{user.username}}" class="img-fluid">
+                        {% else %}
+                            <img src="{% static 'assets/images/john wick.jpg' %}" alt="super" class="img-fluid"/>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="avatar-md profile-user-wid mb-4">
+                            <img src="assets/images/users/avatar-1.jpg" alt="" class="img-thumbnail rounded-circle">
+                        </div>
+                        <h5 class="font-size-15 text-truncate">John Wick</h5>
+                        <p class="text-muted mb-0 text-truncate">Continental University</p>
+                    </div>
+
+                    <div class="col-sm-8">
+                        {% if user.role == "1" %}
+                        <div class="pt-3">
+                            <div class="mt-4">
+                                <a href="{% url 'accounts:super_profile' %}"  class="btn btn-primary waves-effect waves-light btn-sm">View Profile <i class="mdi mdi-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if user.role == "2" %}
+                        <div class="pt-3">
+                            <div class="mt-4">
+                                <a href="{% url 'accounts:jobseeker_profile_list' %}"  class="btn btn-primary waves-effect waves-light btn-sm">View Profile <i class="mdi mdi-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if user.role == "3" %}
+                        <div class="pt-3">
+                            <div class="mt-4">
+                                <a href="{% url 'accounts:jobseeker_profile_list' %}" class="btn btn-primary waves-effect waves-light btn-sm">View Profile <i class="mdi mdi-arrow-right ms-1"></i></a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!--====================================== dashboard Cards ========================================-->
+
+    {% if user.role == "1" %}
+    <div class="col-xl-8">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Total Registered Users On Portal</p>
+                                <h4 class="mb-0">{{Tota_registered_users}}</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                    <span class="avatar-title">
+                                        <i class="bx bx-user-check font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Total Jobs Posted On Portal</p>
+                                <h4 class="mb-0">{{total_Active_job_posts}}</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center ">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-task font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Total Active Users On Portal</p>
+                                <h4 class="mb-0">{{total_active_users}}</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex flex-wrap">
+                    <h4 class="card-title mb-4">New Registration Over Time</h4>
+                    <div class="ms-auto">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Month</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Year</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% if user.role == "2" %}
+    <div class="col-xl-8">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Users Applied to your Last Post</p>
+                                <h4 class="mb-0">69</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                    <span class="avatar-title">
+                                        <i class="bx bx-user-check font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Total Jobs Posted On Portal</p>
+                                <h4 class="mb-0">723</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center ">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-task font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Your Featured Jobs</p>
+                                <h4 class="mb-0">12</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex flex-wrap">
+                    <h4 class="card-title mb-4">Applicant's Engagement Over Time</h4>
+                    <div class="ms-auto">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Month</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Year</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if user.role == "3" %}
+    <div class="col-xl-8">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Total Post Applied On Portal</p>
+                                <h4 class="mb-0">69</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                    <span class="avatar-title">
+                                        <i class="bx bx-user-check font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Total Jobs Posted On Portal</p>
+                                <h4 class="mb-0">723</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center ">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-task font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium">Call Back From Teachers</p>
+                                <h4 class="mb-0">12</h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-sm-flex flex-wrap">
+                    <h4 class="card-title mb-4">Posts Engagement Over Time</h4>
+                    <div class="ms-auto">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Month</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Year</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+ <!--====================================== End dashboard Cards ========================================-->
+
+</div>
+<!-- end row -->
+
+
+{% endblock content %}
+
+
+
+{% block extrajs %}
+<script>
+// Auto-show modal if needed
+document.addEventListener('DOMContentLoaded', function() {
+    {% if user.role == "2" and not user.organisation %}
+    var myModal = new bootstrap.Modal(document.getElementById('organizationModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
+    myModal.show();
+    {% endif %}
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var modalElement = document.getElementById('JobSeekerModal');
+        
+        if (modalElement) {
+            var jobSeekerModal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static', // Prevent closing by clicking outside
+                keyboard: false // Prevent closing by pressing Esc
+            });
+            jobSeekerModal.show();
+        }
+    });
+    </script>
+    
+{% endblock %}

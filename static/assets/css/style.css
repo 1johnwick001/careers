@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500;1,700;1,800&amp;display=swap');
+
+
+:root * {
+	--ezy-theme-color-rgb: 0, 122, 255 !important; 
+	--ezy-theme-color: rgb(0, 122, 255) !important;
+}
+
+.ezy__signin16 {
+        /* Bootstrap variables */
+        --bs-body-color: #333b7b;
+        --bs-body-bg: rgb(255, 255, 255);
+
+        /* Easy Frontend variables */
+        --ezy-theme-color: rgb(13, 110, 253);
+        --ezy-theme-color-rgb: 13, 110, 253;
+
+        background-image: url("../images/loginbackground.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #fff;
+        padding: 120px 0;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      @media (min-width: 991px) {
+        .ezy__signin16 {
+          padding: 200px 0;
+        }
+      }
+
+      .ezy__signin16-heading {
+        font-weight: 300;
+        font-size: 32px;
+        line-height: 1;
+      }
+
+      .ezy__signin16-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, #005bea, #00c6fb);
+        opacity: 0.8;
+        z-index: -1;
+      }
+
+      .ezy__signin16-user-img {
+        width: 200px;
+        height: auto;
+      }
+      /* form */
+
+      .ezy__signin16 .form-control {
+        min-height: 48px;
+        line-height: 45px;
+        background-color: #fff;
+        color: rgba(22, 22, 22, 0.75);
+        border: 0;
+        border-radius: 100px;
+        padding: 0 25px;
+        font-weight: 700;
+      }
+      .ezy__signin16 .form-control::placeholder {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .ezy__signin16 .form-control:focus {
+        border-color: var(--ezy-theme-color);
+      }
+      /* btn */
+      .ezy__signin16-btn {
+        height: 48px;
+        padding: 10px 30px;
+        font-weight: 600;
+        font-size: 16;
+        line-height: 1.4;
+        background-color: var(--ezy-theme-color);
+        color: #ffffff;
+        border-radius: 100px;
+      }
+
+      .ezy__signin16-btn:hover {
+        color: #ffffff;
+        background-color: rgba(var(--ezy-theme-color-rgb), 0.9);
+      }
+      .ezy__signin16 a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 18px;
+        transition: 0.35s;
+      }
+      .ezy__signin16 a:hover {
+        color: var(--ezy-theme-color);
+        font-size: 18px;
+      }
+

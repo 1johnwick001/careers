@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container my-4">
+  <!-- Page Title -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+        <h4 class="mb-sm-0 font-size-18">Your Applied Job Applications</h4>
+        <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="{% url 'accounts:jobseeker_home' %}">Home</a></li> >>
+            <li class="breadcrumb-item active">Applied Jobs Details</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Applications Table in a Card -->
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="bg-secondary text-white" style="background: linear-gradient(to right, #0099f7,rgb(134, 71, 69) )">
+            <tr>
+              <th>sr.no.</th>
+              <th>Job Title</th>
+              <th>Applied To</th>
+              <th>Applied At</th>
+              <th>Employer Viewed?</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for app in applications %}
+            <tr>
+            
+              <td>{{ forloop.counter}}</td>
+              <td>{{ app.job_posting.job_title }}</td>
+              <td>{{ app.job_posting.organisation.org_name }}</td>
+              <td>{{ app.applied_at|date:"M d, Y H:i" }}</td>
+              <td class='text-center'>
+                {% if app.employer_viewed %}
+                    <span style="color: green;">✔️</span>
+                {% else %}
+                    <span style="color: red;">❌</span>
+                {% endif %}
+            </td>
+              <td>
+                <span class="badge 
+                    {% if app.get_status_display == 'Applied' %} 
+                        bg-warning 
+                    {% elif app.get_status_display == 'Accepted' %} 
+                        bg-success 
+                    {% elif app.get_status_display == 'Rejected' %} 
+                        bg-danger 
+                    {% else %} 
+                        bg-info
+                    {% endif %} 
+                ">
+                    {{ app.get_status_display }}
+                </span>
+            </td>
+              <td>
+                <!-- View button linking to JobSeekerJobDetailView -->
+                <a href="{% url 'accounts:job_posting_detail' pk=app.job_posting.pk %}" class="btn btn-sm btn-info" title="View Job Details">
+                  <i class="fas fa-eye"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">No applications found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

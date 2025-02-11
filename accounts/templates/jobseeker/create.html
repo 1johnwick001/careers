@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+    <h2>Create Job Seeker Profile</h2>
+    <form method="post" enctype="multipart/form-data" id="main-form">
+        {% csrf_token %}
+        
+        <!-- Main Profile Form -->
+        <div class="card mb-4">
+            <div class="card-header">Personal Information</div>
+            <div class="card-body">
+                {% for field in form %}
+                    <div class="mb-3">
+                        {{ field|as_crispy_field }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Education Table -->
+        <div class="card mb-4">
+            <div class="card-header">Education Details</div>
+            <div class="card-body">
+                <table class="table table-bordered" id="education-table">
+                    <thead>
+                        <tr>
+                            <th>Degree</th>
+                            <th>Institution</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Percentage</th>
+                            <th>Board</th>
+                            <th>Specialization</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added dynamically -->
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" id="add-education">Add Education</button>
+            </div>
+        </div>
+
+        <input type="hidden" name="education_data" id="education-data">
+
+        <button type="submit" class="btn btn-primary">Submit Profile</button>
+    </form>
+</div>
+
+<style>
+    .delete-row {
+        color: red;
+        font-size:x-large;
+        cursor: pointer;
+    }
+</style>
+
+{% endblock content %}
+
+{% block extrajs %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const educationTable = document.querySelector("#education-table tbody");
+        const addEducationBtn = document.getElementById("add-education");
+        const educationDataInput = document.getElementById("education-data");
+
+        function updateEducationData() {
+            let educationEntries = [];
+            document.querySelectorAll("#education-table tbody tr").forEach(row => {
+                const entry = {
+                    degree: row.querySelector("[name='degree']").value,
+                    institution: row.querySelector("[name='institution']").value,
+                    start_date: row.querySelector("[name='start_date']").value,
+                    end_date: row.querySelector("[name='end_date']").value,
+                    percentage: row.querySelector("[name='percentage']").value,
+                    board: row.querySelector("[name='board']").value,
+                    specialization: row.querySelector("[name='specialization']").value
+                };
+                educationEntries.push(entry);
+            });
+            educationDataInput.value = JSON.stringify(educationEntries);
+        }
+
+        function addEducationRow() {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>
+                    <select name="degree" class="form-control">
+                        <option value="PHD">Ph.D.</option>
+                        <option value="MASTERS">Masters</option>
+                        <option value="BACHELORS">Bachelors</option>
+                        <option value="SENIOR">Senior</option>
+                        <option value="SECONDARY">Secondary</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </td>
+                <td><input type="text" name="institution" class="form-control" required></td>
+                <td><input type="date" name="start_date" class="form-control" required></td>
+                <td><input type="date" name="end_date" class="form-control" required></td>
+                <td><input type="number" name="percentage" class="form-control" min="0" max="100"></td>
+                <td><input type="text" name="board" class="form-control"></td>
+                <td><input type="text" name="specialization" class="form-control"></td>
+                <td><span class="delete-row">&times;</span></td>
+            `;
+
+            row.querySelector(".delete-row").addEventListener("click", function() {
+                row.remove();
+                updateEducationData();
+            });
+
+            educationTable.appendChild(row);
+            updateEducationData();
+        }
+
+        addEducationBtn.addEventListener("click", addEducationRow);
+    });
+</script>
+
+{% endblock extrajs %}

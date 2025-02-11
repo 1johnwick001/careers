@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-center">Update Your Profile</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- User Form -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Personal Information</h5>
+            </div>
+            <div class="card-body">
+                {% for field in user_form %}
+                    <div class="mb-3">
+                        {{ field|as_crispy_field }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'accounts:jobseeker_profile_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+
+{% endblock %}

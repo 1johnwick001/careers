@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Create a New Job Posting</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Job Title and Description -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Job Details</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.job_title|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.job_category|as_crispy_field }}
+                                </div>
+                            </div>
+                            {{ form.job_description|as_crispy_field }}
+                        </div>
+
+                        <!-- Job Type and Experience -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Job Type & Requirements</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.job_type|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.job_experience_required|as_crispy_field }}
+                                </div>
+                            </div>
+                            {{ form.job_skills|as_crispy_field }}
+                        </div>
+
+                        <!-- Location Details -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Location</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.job_city|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.job_state|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.job_full_address|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.job_address_pin|as_crispy_field }}
+                                </div>
+                            </div>
+                            {{ form.job_is_remote|as_crispy_field }}
+                        </div>
+
+                        <!-- Salary and Contact -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Salary & Contact</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.job_salary_offered|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.job_mobile|as_crispy_field }}
+                                </div>
+                            </div>
+                            {{ form.job_email|as_crispy_field }}
+                        </div>
+
+                        <!-- Job Logo and Expiration -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Additional Information</h5>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ form.job_expiration_date|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Status -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Job Status</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.is_active|as_crispy_field }}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    {{ form.is_verified|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i> Create Job Posting
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

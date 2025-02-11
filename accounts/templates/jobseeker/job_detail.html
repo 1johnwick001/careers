@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="card border-primary">
+        <div class="card-body">
+            <div class="bg-primary bg-gradient text-white p-3">
+                <h3 class="card-title">Organisation : {{ jobsdetail.organisation.org_name }}</h3>
+                <hr>
+                <h4 class="card-subtitle mb-2">Title : {{ jobsdetail.job_title }}</h4>
+                <hr>
+                <p class="card-text"><strong>Description:</strong> {{ jobsdetail.job_description| linebreaks }}</p>
+            </div>
+            <div class="p-3">
+                <h5 class="mb-3">Job Details</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Skills:</strong> {{ jobsdetail.job_skills }}</p>
+                        <p><strong>Type:</strong> {{ jobsdetail.job_type }}</p>
+                        <p><strong>Category:</strong> {{ jobsdetail.job_category }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Experience Required:</strong> {{ jobsdetail.job_experience_required }} yrs </p>
+                        <p><strong>Salary:</strong> {{ jobsdetail.job_salary_offered }}</p>
+                        <p><strong>Expired On:</strong> {{ jobsdetail.job_expiration_date }}</p>
+                    </div>
+                </div>
+                <hr>
+                <h5 class="mb-3">Contact Information</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Full Address:</strong> {{ jobsdetail.job_full_address }}</p>
+                        <p><strong>Pin:</strong> {{ jobsdetail.job_address_pin }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mobile No:</strong> {{ jobsdetail.job_mobile }}</p>
+                        <p><strong>Email:</strong> {{ jobsdetail.job_email }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class='mt-5 d-flex flex-column'>
+                {% if user.is_authenticated and user.job_seeker_profile %}
+                    {% if has_applied %}
+                        <button disabled class='btn btn-success w-100 mb-3'>Applied</button>
+                    {% else %}
+                        <a href="{% url 'accounts:job_application_submit' job_pk=jobsdetail.pk %}" class="btn btn-info w-100 mb-3">Apply</a>
+                    {% endif %}
+                {% endif %}
+                <a class='btn btn-secondary w-100' href="{% url 'accounts:jobseeker_home' %}" >GO BACK</a>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

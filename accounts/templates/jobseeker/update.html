@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4 text-center">Update Your Profile</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- User Form -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Personal Information</h5>
+            </div>
+            <div class="card-body">
+                {% for field in user_form %}
+                    <div class="mb-3">
+                        {{ field|as_crispy_field }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Job Seeker Profile Form -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Job Seeker Profile</h5>
+            </div>
+            <div class="card-body">
+                {% for field in jobseeker_form %}
+                    <div class="mb-3">
+                        {{ field|as_crispy_field }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Education Formset -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Education Details</h5>
+            </div>
+            <div class="card-body">
+                {{ education_formset.management_form }}
+                
+                <div id="education-forms">
+                    {% for form in education_formset %}
+                        <div class="education-form mb-4 p-3 border rounded">
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    {{ field|as_crispy_field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="button" class="btn btn-secondary" id="add-education">Add Another Education</button>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'accounts:jobseeker_profile_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('add-education').addEventListener('click', function() {
+            const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+            const currentForms = parseInt(totalForms.value);
+            const formContainer = document.getElementById('education-forms');
+            const newForm = formContainer.children[0].cloneNode(true);
+
+            const newFormHtml = newForm.innerHTML.replace(/form-(\d+)-/g, `form-${currentForms}-`);
+            newForm.innerHTML = newFormHtml;
+
+            newForm.querySelectorAll('input, select').forEach(input => { input.value = ''; });
+
+            formContainer.appendChild(newForm);
+            totalForms.value = currentForms + 1;
+        });
+    });
+</script>
+{% endblock %}

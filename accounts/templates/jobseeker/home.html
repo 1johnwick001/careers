@@ -1,0 +1,134 @@
+<!-- home.html -->
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<div class="container-fluid px-4 py-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-5 fw-bold mb-3 gradient-text">
+                Find Your Next Opportunity
+            </h1>
+            <p class="lead">Discover teaching and administrative positions across top institutions</p>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <select name="job_type" class="form-select">
+                        <option value="">All Job Types</option>
+                        {% for type in job_types %}
+                        <option value="{{ type.0 }}" {% if request.GET.job_type == type.0 %}selected{% endif %}>
+                            {{ type.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="location" class="form-control" 
+                           placeholder="City or State" value="{{ request.GET.location }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="job_category" class="form-select">
+                        <option value="">All Job Category</option>
+                        {% for type in job_categories %}
+                        <option value="{{ type.0 }}" {% if request.GET.job_category == type.0 %}selected{% endif %}>
+                            {{ type.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i>Filter Jobs
+                    </button>
+                </div>
+            </form>
+            {% if request.GET %}
+            <div class="mt-3">
+                <a href="{% url 'accounts:jobseeker_home' %}" class="btn btn-outline-secondary">
+                    Clear Filters
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Job Listings -->
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for job in jobposts %}
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-effect">
+                <div class="card-body">
+                    <div class="d-flex align-items-start">
+                        <img src="{{ job.organisation.logo.url }}" 
+                             class="rounded me-3" 
+                             style="width: 80px; height: 80px; object-fit: contain"
+                             alt="{{ job.organisation.org_name }} logo">
+                        <div class="flex-grow-1">
+                            <h5 class="card-title mb-1">{{ job.job_title }}</h5>
+                            <p class="text-muted mb-2">{{ job.organisation.org_name }}</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <span class="badge bg-primary">{{ job.get_job_type_display }}</span>
+                                <span class="badge bg-success">{{ job.job_category }}</span>
+                            </div>
+                            <div class="job-meta">
+                                <p class="mb-1">
+                                    <i class="fas fa-map-marker-alt me-2"></i>
+                                    {{ job.job_city }}, {{ job.job_state }}
+                                </p>
+                                <p class="mb-1">
+                                    
+                                    <i class="fas fa-rupee-sign me-2"></i>
+                                    {{ job.job_salary_offered }}
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-briefcase me-2"></i>
+                                    {{ job.job_experience_required }}+ years experience
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            Posted {{ job.created_at|timesince }} ago
+                        </small>
+                        <a href="{% url 'accounts:job_posting_detail' job.pk %}" 
+                           class="btn btn-sm btn-outline-primary">
+                            View Details <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 w-100">
+            <div class="alert alert-info text-center ">
+                No jobs found matching your criteria
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .hover-effect {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    .job-meta p {
+        margin-bottom: 0.5rem;
+        color: #6c757d;
+    }
+</style>
+
+{% endblock content %}

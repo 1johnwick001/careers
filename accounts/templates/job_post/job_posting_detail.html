@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h3>Organisation : {{ job.organisation.org_name }}</h3>
+    <hr>
+    <h4>Title : {{ job.job_title }}</h4>
+    <hr>
+    <p><strong>Description:</strong> {{ job.job_description| linebreaks }}</p>
+    <hr>
+    <p><strong>Skills:</strong> {{ job.job_skills }}</p>
+    <p><strong>Type:</strong> {{ job.job_type }}</p>
+    <p><strong>Category:</strong> {{ job.job_category }}</p>
+    <p><strong>Experience Required:</strong> {{ job.job_experience_required }} yrs </p>
+    <p><strong>City:</strong> {{ job.job_city }}</p>
+    <p><strong>State:</strong> {{ job.job_state }}</p>
+    <p><strong>Full Address:</strong> {{ job.job_full_address }}</p>
+    <p><strong>Pin:</strong> {{ job.job_address_pin }}</p>
+    <p><strong>Mobile No:</strong> {{ job.job_mobile }}</p>
+    <p><strong>Email:</strong> {{ job.job_email }}</p>
+    <p><strong>Salary:</strong> {{ job.job_salary_offered }}</p>
+    <p><strong>Expired On:</strong> {{ job.job_expiration_date }}</p>
+    
+    
+    <a href="{% url 'accounts:employer_job_post_update' job.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'accounts:employer_job_post_delete' job.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'accounts:employer_job_post_list' %}" class="btn btn-secondary">Back to List</a>
+
+
+    <a href="{% url 'accounts:application_list' job.pk %}" class="btn btn-primary">View Applications</a>
+</div>
+{% endblock %}

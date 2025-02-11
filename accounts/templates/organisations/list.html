@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Page Title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Organisation's Detail</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'accounts:dash_page' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Organisation's Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if organisations %}
+
+<!-- User Details Card -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                {% for org in organisations %}
+                <div class="text-center">
+                <!-- User Image -->
+                    {% if org.logo %}
+                        <img src="{{ org.logo.url }}" alt="organisation Image" class="rounded-circle avatar-xl mb-3">
+                    {% else %}
+                        <img src="{% static 'assets/images/john wick.jpg' %}" alt="Default User Image" class="rounded-circle avatar-xl mb-3">
+                    {% endif %}
+
+                    <!-- Username -->
+                    
+                    <h4 class="card-title">UserName :- {{ org.user.username }}</h4>
+                    
+                </div>
+
+                <hr>
+
+                <!-- Organisation Information -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Organisation Name</h5>
+                            <p class="text-muted mb-0">{{ org.org_name }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Organisation Description</h5>
+                            <p class="text-muted mb-0">
+                                {% if org.org_description %}
+                                    {{ org.org_description }}
+                                {% else %}
+                                    No Description available
+                                {% endif %}        
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Established Date</h5>
+                            <p class="text-muted mb-0">
+                                {% if org.estd_date %}
+                                    {{ org.estd_date }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Website URL</h5>
+                            <p class="text-muted mb-0">
+                                {% if org.website_url %}
+                                    {{ org.website_url}}
+                                {% else %}
+                                    No URL provided
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+               
+
+                
+
+                <!-- Back Button -->
+                <div class="text-center mt-4">
+                    <a href="{% url 'accounts:edit_organisation' org.pk %}" class="btn btn-secondary">
+                        <i class="mdi mdi-arrow-left me-1"></i> Edit Organisation Detail
+                    </a>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{% url 'accounts:dash_page' %}" class="btn btn-secondary">
+                        <i class="mdi mdi-arrow-left me-1"></i> Go To Dashboard
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

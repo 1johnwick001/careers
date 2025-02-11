@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- MATERIAL DESIGN   -->
+		<link rel="stylesheet" href="{% static 'assets/css/icons.min.css' %}">
+		
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="{% static 'assets/css/register.css' %}">
+	<meta name="robots" content="noindex, follow">
+
+    <style>
+        .form-select {
+            padding: 10px 30px 10px 40px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+	<body>
+
+		<div class="wrapper" style="background-image: url('images/bg-registration-form-3.jpg');">
+			<div class="inner">
+				<form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+					<h3>Registration Form</h3>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <p style="color: red; text-align: center; margin-bottom: 15px;">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="">Username:</label>
+							<div class="form-holder">
+								<i class="mdi mdi-account" aria-hidden="true"></i>
+								<input type="text" class="form-control" name="username" required value="{{ form.username.value|default:'' }}">
+							</div>
+                            {% if form.username.errors %}
+                                <div class="error-message">
+                                    {% for error in form.username.errors %}
+                                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+						</div>
+						<div class="form-wrapper">
+							<label for="">Email:</label>
+							<div class="form-holder">
+								<i style="font-style: normal; font-size: 15px;">@</i>
+								<input type="email" class="form-control" name="email" required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="">First Name:</label>
+							<div class="form-holder">
+								<i class="mdi mdi-account" aria-hidden="true"></i>
+								<input type="text" class="form-control" name="first_name" required>
+							</div>
+						</div>
+						<div class="form-wrapper">
+							<label for="">Last Name:</label>
+							<div class="form-holder">
+								<i class="mdi mdi-account" aria-hidden="true"></i>
+								<input type="text" class="form-control" name="last_name" required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="">Phone No:</label>
+							<div class="form-holder">
+								<i class="mdi mdi-phone" aria-hidden="true"></i>
+								<input type="text" class="form-control" name="phone_number" required>
+							</div>
+						</div>
+						<div class="form-wrapper">
+							<label for="">DOB:</label>
+							<div class="form-holder">
+								<i class="mdi mdi-calendar-range" aria-hidden="true"></i>
+								<input type="date" class="form-control" name="dob" required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+                        <div class="form-wrapper">
+                            <label for="gender" class="form-label">Gender</label>
+                            <div class="form-holder">
+                                <i class="mdi mdi-face-recognition"></i>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="#" disabled selected>Select an option</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Prefer_Not_to_Say">Prefer Not to Say</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-wrapper">
+                            <label for="role" class="form-label">Role</label>
+                            <div class="form-holder">
+                                <i class="mdi mdi-alpha-r-circle-outline"></i>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="#" disabled selected>Select an option</option>
+                                    <option value="2">Employer</option>
+                                    <option value="3">Job Seeker</option>
+                                </select>
+                            </div>    
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="form-wrapper">
+                            <label for="">Password:</label>
+                            <div class="form-holder">
+                                <i class="mdi mdi-lock-alert"></i>
+                                <input type="password" name="password" class="form-control" placeholder="********" required>
+                            </div>
+                        </div>
+                        <div class="form-wrapper">
+                            <label for="">Confirm Password:</label>
+                            <div class="form-holder">
+                                <i class="mdi mdi-lock-alert"></i>
+                                <input type="password" name="confirm_password" class="form-control" placeholder="********" required>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+						<div class="form-wrapper">
+                            <div class="form-holder">
+							<label for="user_image" class="form-label">Profile Picture</label>
+                            <input type="file" class="form-control" id="user_image" name="user_image" accept="image/*" required>
+                            </div>
+						</div>
+						<div class="form-wrapper">
+                            <div class="form-holder">
+							<label for="user_image" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                            </div>
+						</div>
+						
+					</div>
+					
+					<div class="form-end">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" required> I agree to the terms and conditions.
+								<span class="checkmark"></span>
+							</label>
+						</div>
+						<div class="button-holder">
+							<button>Register Now</button>
+						</div>
+						
+					</div>
+                </form>
+                <div class="form-end">
+                    <div class="button-holder w-100">
+                        <a href="{% url 'accounts:login_page' %}">
+                            <button>Alredy Have An Account??</button>
+                        </a>
+                    </div>
+                    
+                </div>
+                
+			</div>
+		</div>
+
+</body>
+</html>

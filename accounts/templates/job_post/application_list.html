@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container my-4">
+    <!-- Page Title -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+          <h4 class="mb-sm-0 font-size-18">Applicants for {{ job_posting.job_title }}</h4>
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item"><a href="{% url 'accounts:jobseeker_home' %}">Home</a></li> >>
+              <li class="breadcrumb-item active">Applicant's Details</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% comment %} <table>
+    <thead>
+        <tr>
+            <th>Applicant</th>
+            <th>Status</th>
+            <th>Applied At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.job_seeker_profile.user.first_name }} {{ application.job_seeker_profile.user.last_name }}</td>
+            <td>{{ application.get_status_display }}</td>
+            <td>{{ application.applied_at|date:"M d, Y" }}</td>
+            <td>
+                <a href="{% url 'accounts:application_detail_update' application.pk %}">View</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No applications found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> {% endcomment %}
+
+
+
+<div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="bg-secondary text-white text-center" style="background: linear-gradient(to right, #0099f7,rgb(134, 71, 69) )">
+            <tr>
+                <th>sr no.</th>
+                <th>Applicant</th>
+                <th>Applied At</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for application in applications %}
+            <tr class='text-center'>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ application.job_seeker_profile.user.first_name }} {{ application.job_seeker_profile.user.last_name }}</td>
+                <td>{{ application.applied_at|date:"M d, Y" }}</td>
+				<td>
+                    <span class="badge 
+                    {% if app.get_status_display == 'Applied' %} 
+                        bg-warning 
+                    {% elif app.get_status_display == 'Accepted' %} 
+                        bg-success 
+                    {% elif app.get_status_display == 'Rejected' %} 
+                        bg-danger 
+                    {% else %} 
+                        bg-info
+                    {% endif %} 
+                  ">
+                    {{ application.get_status_display }}
+                  </span>
+                </td>
+                <td >
+                    <a href="{% url 'accounts:application_detail_update' application.pk %}">
+						<i class="fa fa-eye" aria-hidden="true"></i>
+					</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class='text-center'>No applications found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  {% endblock %}

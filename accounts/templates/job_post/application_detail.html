@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Application Details</h2>
+                </div>
+                
+                <div class="card-body p-4">
+                    <!-- Tabs Navigation -->
+                    <ul class="nav nav-tabs nav-justified mb-4" id="appTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button">
+                                <i class="bi bi-person-badge me-2"></i>Applicant Profile
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="application-tab" data-bs-toggle="tab" data-bs-target="#application" type="button">
+                                <i class="bi bi-file-earmark-text me-2"></i>Application
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="education-tab" data-bs-toggle="tab" data-bs-target="#education" type="button">
+                                <i class="bi bi-mortarboard me-2"></i>Education
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tabs Content -->
+                    <div class="tab-content">
+                        <!-- Applicant Profile Tab -->
+                        <div class="tab-pane fade show active" id="profile">
+                            <div class="row">
+                                <!-- ID Card Style Section -->
+                                <div class="col-md-5 mb-4">
+                                    <div class="card border-primary">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">Professional Profile</h5>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <div class="position-relative mb-3">
+                                                <img src="{{ application.job_seeker_profile.user.user_image.url }}" 
+                                                     class="rounded-circle shadow border border-3 border-primary" 
+                                                     alt="Profile Picture" 
+                                                     style="width: 150px; height: 150px; object-fit: contain;">
+                                            </div>
+                                            <h3 class="h4 mb-2">{{ application.job_seeker_profile.user.get_full_name }}</h3>
+                                            <p class="text-muted mb-2">
+                                                {{ application.job_seeker_profile.current_designation|default:"-" }}
+                                            </p>
+                                            <div class="d-flex justify-content-center gap-2 mb-3">
+                                                {% if application.job_seeker_profile.linkedin_url %}
+                                                <a href="{{ application.job_seeker_profile.linkedin_url }}" 
+                                                   class="btn btn-outline-primary btn-sm">
+                                                    <i class="bi bi-linkedin"></i> LinkedIn
+                                                </a>
+                                                {% endif %}
+                                                {% if application.job_seeker_profile.resume %}
+                                                <a href="{{ application.job_seeker_profile.resume.url }}" 
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="bi bi-download"></i> Resume
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>Experience</span>
+                                                <span class="badge bg-primary rounded-pill">
+                                                    {{ application.job_seeker_profile.experience_years }} yrs
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <small class="text-muted">Contact</small>
+                                                <div class="mt-1">
+                                                    {{ application.job_seeker_profile.user.email }}<br>
+                                                    {{ application.job_seeker_profile.user.phone_number|default:"-" }}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Detailed Information -->
+                                <div class="col-md-7">
+                                    <div class="card h-100">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Personal Details</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <dl class="row mb-0">
+                                                <dt class="col-sm-4">Date of Birth</dt>
+                                                <dd class="col-sm-8">{{ application.job_seeker_profile.user.dob|default:"-" }}</dd>
+
+                                                <dt class="col-sm-4">Gender</dt>
+                                                <dd class="col-sm-8">{{ application.job_seeker_profile.user.gender|default:"-" }}</dd>
+
+                                                <dt class="col-sm-4">Location</dt>
+                                                <dd class="col-sm-8">
+                                                    {{ application.job_seeker_profile.user.address|default:"-" }}
+                                                </dd>
+
+                                                <dt class="col-sm-4">Bio</dt>
+                                                <dd class="col-sm-8 text-muted">
+                                                    {{ application.job_seeker_profile.user_bio|default:"No bio provided" }}
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application Info Tab -->
+                        <div class="tab-pane fade" id="application">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Application Timeline</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div>
+                                                    <h6 class="mb-0">Current Status</h6>
+                                                    <span class="badge bg-{% if application.status == 'ACCEPTED' %}success
+                                                        {% elif application.status == 'REJECTED' %}danger
+                                                        {% else %}warning{% endif %}">
+                                                        {{ application.get_status_display }}
+                                                    </span>
+                                                </div>
+                                                <div class="text-end">
+                                                    <small class="text-muted">Applied on: {{ application.applied_at|date:"M d, Y" }}</small>
+                                                </div>
+                                            </div>
+                                            
+                                            <form method="post" class="mt-4">
+                                                {% csrf_token %}
+                                                <div class="row g-3 align-items-center">
+                                                    <div class="col-md-8">
+                                                        <label class="form-label">Update Application Status</label>
+                                                        {{ form.status }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                                                            <i class="bi bi-arrow-repeat me-2"></i>Update Status
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4 mt-3 mt-md-0">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Quick Actions</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                <a href="mailto:{{ application.job_seeker_profile.user.email }}" 
+                                                   class="btn btn-outline-secondary">
+                                                    <i class="bi bi-envelope me-2"></i>Send Email
+                                                </a>
+                                                {% if application.job_seeker_profile.resume %}
+                                                <a href="{{ application.job_seeker_profile.resume.url }}" 
+                                                   class="btn btn-outline-primary">
+                                                    <i class="bi bi-file-earmark-pdf me-2"></i>Download Resume
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Education Tab -->
+                        <div class="tab-pane fade" id="education">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Education History</h5>
+                                </div>
+                                <div class="card-body">
+                                    {% if education_details %}
+                                    <div class="row g-4">
+                                        {% for edu in education_details %}
+                                        <div class="col-12">
+                                            <div class="card shadow-sm-hover">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h6 class="mb-1">
+                                                                {{ edu.degree|default:"Education" }}
+                                                                {% if edu.specialization %}in {{ edu.specialization }}{% endif %}
+                                                            </h6>
+                                                            <p class="mb-1 text-muted">
+                                                                {{ edu.institution|default:"-" }}
+                                                                {% if edu.board %}({{ edu.board }}){% endif %}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-4 text-md-end">
+                                                            <p class="mb-1 text-muted">
+                                                                {{ edu.start_date|default:"-" }} 
+                                                                {% if edu.end_date %} - {{ edu.end_date }}{% endif %}
+                                                            </p>
+                                                            {% if edu.percentage %}
+                                                            <span class="badge bg-success">
+                                                                {{ edu.percentage }}% Score
+                                                            </span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    {% if edu.major %}
+                                                    <hr class="my-2">
+                                                    <p class="mb-0 small text-muted">
+                                                        Major: {{ edu.major }}
+                                                    </p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    <div class="text-center py-4">
+                                        <i class="bi bi-info-circle display-6 text-muted mb-3"></i>
+                                        <p class="text-muted">No education details available</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Page Title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">User Details</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'accounts:dash_page' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'accounts:admin_total_users' %}">Users</a></li>
+                    <li class="breadcrumb-item active">User Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Details Card -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center">
+                    <!-- User Image -->
+                    {% if user_details.user_image %}
+                        <img src="{{ user_details.user_image.url }}" alt="User Image" class="rounded-circle avatar-xl mb-3">
+                    {% else %}
+                        <img src="{% static 'assets/images/default-user.png' %}" alt="Default User Image" class="rounded-circle avatar-xl mb-3">
+                    {% endif %}
+
+                    <!-- Username and Role -->
+                    <h4 class="card-title">{{ user_details.username }}</h4>
+                    <p class="text-muted">
+                        <span class="badge bg-{% if user_details.role == '1' %}danger{% elif user_details.role == '2' %}primary{% else %}success{% endif %}">
+                            {{ user_details.get_role_display }}
+                        </span>
+                    </p>
+                </div>
+
+                <hr>
+
+                <!-- User Information -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Full Name</h5>
+                            <p class="text-muted mb-0">{{ user_details.first_name }} {{ user_details.last_name }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Email</h5>
+                            <p class="text-muted mb-0">{{ user_details.email }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Phone Number</h5>
+                            <p class="text-muted mb-0">
+                                {% if user_details.phone_number %}
+                                    {{ user_details.country_code }} {{ user_details.phone_number }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Date of Birth</h5>
+                            <p class="text-muted mb-0">
+                                {% if user_details.dob %}
+                                    {{ user_details.dob|date:"M d, Y" }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Gender</h5>
+                            <p class="text-muted mb-0">
+                                {% if user_details.gender %}
+                                    {{ user_details.get_gender_display }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Registration Date</h5>
+                            <p class="text-muted mb-0">{{ user_details.registration_date|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h5 class="font-size-14">Account Status</h5>
+                            <p class="text-muted mb-0">
+                                <span class="badge bg-{% if user_details.is_active %}success{% else %}danger{% endif %}">
+                                    {% if user_details.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back Button -->
+                <div class="text-center mt-4">
+                    <a href="{% url 'accounts:admin_total_users' %}" class="btn btn-secondary">
+                        <i class="mdi mdi-arrow-left me-1"></i> Back to Users
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

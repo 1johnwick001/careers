@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Edit Your Organization</h4>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dash_page' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Edit Organisation Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Organization Details</h4>
+                    
+                    {% include 'messages.html' %}
+                    
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.org_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.estd_date|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                {{ form.org_description|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.website_url|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.logo|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary w-50">
+                                    <i class="fas fa-save me-2"></i>Register Organization
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Date picker initialization
+    const estdDate = document.getElementById('id_estd_date');
+    if (estdDate) {
+        new Datepicker(estdDate, {
+            format: 'yyyy-mm-dd',
+            autohide: true
+        });
+    }
+
+    // Logo upload preview
+    document.getElementById('id_logo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('logo-preview');
+        if (file && preview) {
+            preview.src = URL.createObjectURL(file);
+        }
+    });
+    });
+</script>
+{% endblock %}

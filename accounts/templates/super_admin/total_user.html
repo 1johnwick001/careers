@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .filters {
+        margin-bottom: 20px;
+    }
+    .filters a {
+        padding: 8px 16px;
+        margin-right: 10px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #333;
+    }
+    .filters a.active {
+        background: #007bff;
+        color: white;
+    }
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;  /* Reduced width */
+        height: 20px; /* Reduced height */
+        vertical-align: middle; /* Align with other inline elements */
+        margin-left: 5px; /* Add some spacing from the eye icon */
+    }
+    
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px; /* More rounded with smaller size */
+    }
+    
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;  /* Smaller height */
+        width: 16px;   /* Smaller width */
+        left: 2px;     /* Adjusted left position */
+        bottom: 2px;   /* Adjusted bottom position */
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+        background-color: #007bff;
+    }
+    
+    input:checked + .toggle-slider:before {
+        transform: translateX(20px); /* Adjusted for smaller width */
+    }
+    
+    /* Optional: Adjust actions column to prevent wrapping */
+    td.actions {
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px; /* Space between icon and toggle */
+    }
+
+    input:checked + .toggle-slider {
+        background-color: #007bff;
+    }
+
+    input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+    }
+</style>
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Total Users</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <a href="{% url 'accounts:landing_page' %}">
+                        <li class="breadcrumb-item active">home</li>
+                    </a> >>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Registered Users</a></li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Filter Buttons -->
+<div class="filters">
+    <a href="?role=all" class="{% if current_role == 'all' %}active{% endif %}">
+        All (Employers & Job Seekers)
+    </a>
+    {% for value, name in role_choices %}
+        <a href="?role={{ value }}" class="{% if current_role == value %}active{% endif %}">
+            {{ name }}
+        </a>
+    {% endfor %}
+</div>
+
+{% if users %}
+
+<!-- Users Table -->
+<table id="myTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Registration Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.get_role_display }}</td>
+            <td>{{ user.registration_date|date:"M d, Y" }}</td>
+            <td>
+                {% if user.is_active %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-danger">Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                <!-- View User Button -->
+                <a href="{% url 'accounts:user_detail' user.id %}" class="btn btn-info btn-sm">
+                    <i class="fa fa-eye"></i>
+                </a>
+
+                <!-- Toggle Active/Inactive -->
+                <label class="toggle-switch">
+                    <input type="checkbox" 
+                           class="toggle-status" 
+                           data-user-id="{{ user.id }}" 
+                           {% if user.is_active %}checked{% endif %}>
+                    <span class="toggle-slider"></span>
+                </label>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Total Users</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <a href="{% url 'accounts:landing_page' %}">
+                        <li class="breadcrumb-item active">home</li>
+                    </a> >>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Registered Users</a></li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<table id="myTable" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Registration Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+</table>
+
+{% endif %}
+
+
+{% endblock content %}
+
+{% block extrajs %}
+<script>
+// Wait for jQuery to be fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+    // Use jQuery syntax only after ensuring it's available
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery is not loaded!');
+        return;
+    }
+
+    $(document).on("change", ".toggle-status", function() {
+        const $checkbox = $(this);
+        const userId = $checkbox.data("user-id");
+        const isActive = $checkbox.prop("checked");
+
+        $checkbox.prop("disabled", true); // Disable during request
+
+        $.ajax({
+            url: "{% url 'accounts:toggle_user_status' %}",
+            method: "POST",
+            data: {
+                user_id: userId,
+                is_active: isActive,
+                csrfmiddlewaretoken: "{{ csrf_token }}"
+            },
+            success: (response) => {
+                if (response.success) {
+                    // Update status badge without reloading
+                    const $statusCell = $checkbox.closest('tr').find('td:nth-child(5)');
+                    $statusCell.html(`
+                        <span class="badge bg-${isActive ? 'success' : 'danger'}">
+                            ${isActive ? 'Active' : 'Inactive'}
+                        </span>
+                    `);
+                } else {
+                    $checkbox.prop("checked", !isActive); // Revert on error
+                    alert("Error: " + response.error);
+                }
+            },
+            error: (xhr) => {
+                $checkbox.prop("checked", !isActive); // Revert on failure
+                alert("Failed to update status. Check console.");
+                console.error("AJAX Error:", xhr.responseText);
+            },
+            complete: () => {
+                $checkbox.prop("disabled", false); // Re-enable
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
