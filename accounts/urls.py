@@ -3,6 +3,8 @@ from .views import *
 
 app_name = 'accounts'
 
+# handler404 = 'accounts.views.error_404_view'
+
 urlpatterns = [
     path('',HomeView.as_view(),name='landing_page'),
     path('login-page/',UserLoginView.as_view(),name='login_page'),                #login page
@@ -23,6 +25,8 @@ urlpatterns = [
     path('employer-organisation-list/', EmployerOrganisationListView.as_view(), name='employer_organisation_list'),
     path('employer-organisation-register/', EmployerOrganisationRegisterView.as_view(), name='employer_organisation_resgister'),
     path("employer-organisation-edit/<int:pk>/", EmployerOrganisationUpdateView.as_view(), name="edit_organisation"),
+    path("employer-profile/", EmployerProfileView.as_view(), name="employer_profile"),
+    path("update-employer-profile/", EmployerProfileUpdateView.as_view(), name="update_employer_profile"),
     
     # employer job post
     path("employer-job-post-create/", EmployerJobPostCreateView.as_view(), name="employer_job_post_create"),

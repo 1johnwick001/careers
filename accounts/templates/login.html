@@ -12,112 +12,73 @@
     <link type="text/css" rel="stylesheet" href="{% static 'assets/css/style.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}"> 
     <link type="text/css" rel="stylesheet" href="{% static 'assets/css/fontawesome-all.min.css' %}" />
-
     <style>
-        .error-message {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-    </style>
+                 .error-message {
+                     color: #dc3545;
+                     font-size: 0.875rem;
+                     margin-top: 0.25rem;
+                 }
+        
+                 .alert-danger {
+                     background-color: #f8d7da;
+                     color: #721c24;
+                     padding: 10px;
+                     border-radius: 4px;
+                     margin-bottom: 15px;
+                 }
+             </style>
+    
 </head>
 
 <body>
-    <section class="ezy__signin16 light d-flex align-items-center justify-content-center">
-        <div class="ezy__signin16-overlay"></div>
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div>
-                        <img
-                            src="{% static 'assets/images/logo-white.png' %}"
-                            alt="ScholarByte"
-                            class="ezy__signin16-user-img img-fluid mb-4"
-                        />
-                        <h2 class="ezy__signin16-heading mb-5">Enter Your Credentials</h2>
-                        
-                        <!-- Error Message Container -->
-                        {% comment %} {% if form.errors %}
-                            <div class="alert alert-danger">
-                                {% if form.non_field_errors %}
-                                    {{ form.non_field_errors }}
-                                {% else %}
-                                    Invalid username or password. Please try again.
-                                {% endif %}
-                            </div>
-                        {% endif %} {% endcomment %}
-
-                        {% if messages %}
-                            {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
-                                {{ message }}
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-
-                        <!-- Login Form with Django Form -->
-                        <form method="post" action="{% url 'accounts:login_page' %}">
-                            {% csrf_token %}
-                            
-                            <div class="ezy__signin16-form-card">
-                                <!-- Username Field -->
-                                <div class="form-group w-100 mb-3">
-                                    <input 
-                                        type="text" 
-                                        class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
-                                        name="username" 
-                                        placeholder="Username"
-                                        value="{{ form.username.value|default:'' }}"
-                                        required
-                                    >
-                                    {% if form.username.errors %}
-                                        <div class="error-message">
-                                            {{ form.username.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Password Field -->
-                                <div class="form-group w-100 mb-3">
-                                    <input 
-                                        type="password" 
-                                        class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
-                                        name="password" 
-                                        placeholder="Password"
-                                        required
-                                    >
-                                    {% if form.password.errors %}
-                                        <div class="error-message">
-                                            {{ form.password.errors }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Login Button -->
-                                <button type="submit" class="btn ezy__signin16-btn w-100">
-                                    SIGN IN
-                                </button>
-                            </div>
-
-                            <!-- Forgot Password and Register Links -->
-                            <div class="text-center mt-4">
-                                {% comment %} <a href="{% url 'accounts:password_reset' %}" class="me-3">Forgot Password?</a> {% endcomment %}
-                                <a href="{% url 'accounts:register_page' %}">Don't have an account?</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <div class="wrapper">
+        <div class="logo">
+            <img src="{%static 'assets/images/favicon.ico'%}" alt="ScholarByteCareers">
         </div>
-    </section>
+        {% if messages %}
+                {% for message in messages %}     <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        <div class="text-center mt-4 name">
+            ScholarBytesCareer
+        </div>
+        <form class="p-3 mt-3" method="post" action="{% url 'accounts:login_page' %}">
+            {% csrf_token %}
+            <div class="form-field d-flex align-items-center">
+            
+                 <!-- Username Field -->
+                <span class="far fa-user"></span>
+                <input type="text" name="username" id="userName" placeholder="Username"
+                value="{{ form.username.value|default:'' }}"
+                required
+                >
+                {% if form.username.errors %}
+                <div class="error-message">
+                    {{ form.username.errors }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <input type="password" name="password" id="pwd" placeholder="Password"
+                class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
+                
+                required
+                >
+                {% if form.password.errors %}
+                <div class="error-message">
+                    {{ form.password.errors }}
+                </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn mt-3">Login</button>
+        </form>
+        <div class="text-center fs-6">
+            <a href="{% url 'accounts:register_page' %}"> Sign up</a>
+        </div>
+    </div>
 
     <!-- Required Scripts -->
     <script src="{% static 'assets/js/jquery.min.js' %}"></script>

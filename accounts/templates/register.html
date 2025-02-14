@@ -80,7 +80,7 @@
 							<label for="">Phone No:</label>
 							<div class="form-holder">
 								<i class="mdi mdi-phone" aria-hidden="true"></i>
-								<input type="text" class="form-control" name="phone_number" required>
+								<input type="text" class="form-control" name="phone_number" required minlength="10" maxlength="12">
 							</div>
 						</div>
 						<div class="form-wrapper">
@@ -122,14 +122,14 @@
                             <label for="">Password:</label>
                             <div class="form-holder">
                                 <i class="mdi mdi-lock-alert"></i>
-                                <input type="password" name="password" class="form-control" placeholder="********" required>
+                                <input type="password" name="password" class="form-control" placeholder="********" required minlength="6">
                             </div>
                         </div>
                         <div class="form-wrapper">
                             <label for="">Confirm Password:</label>
                             <div class="form-holder">
                                 <i class="mdi mdi-lock-alert"></i>
-                                <input type="password" name="confirm_password" class="form-control" placeholder="********" required>
+                                <input type="password" name="confirm_password" class="form-control" placeholder="********" required minlength="6">
                             </div>
                         </div>
                     </div>

@@ -1,104 +1,104 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&amp;display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&amp;display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500;1,700;1,800&amp;display=swap');
+/* Importing fonts from Google */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-
-:root * {
-	--ezy-theme-color-rgb: 0, 122, 255 !important; 
-	--ezy-theme-color: rgb(0, 122, 255) !important;
+/* Reseting */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.ezy__signin16 {
-        /* Bootstrap variables */
-        --bs-body-color: #333b7b;
-        --bs-body-bg: rgb(255, 255, 255);
+body {
+    background: #ecf0f3;
+}
 
-        /* Easy Frontend variables */
-        --ezy-theme-color: rgb(13, 110, 253);
-        --ezy-theme-color-rgb: 13, 110, 253;
+.wrapper {
+    max-width: 350px;
+    min-height: 500px;
+    margin: 80px auto;
+    padding: 40px 30px 30px 30px;
+    background-color: #ecf0f3;
+    border-radius: 15px;
+    box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff;
+}
 
-        background-image: url("../images/loginbackground.jpg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        color: #fff;
-        padding: 120px 0;
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-        height: 100vh;
-      }
+.logo {
+    width: 80px;
+    margin: auto;
+}
 
-      @media (min-width: 991px) {
-        .ezy__signin16 {
-          padding: 200px 0;
-        }
-      }
+.logo img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0px 0px 3px #5f5f5f,
+        0px 0px 0px 5px #ecf0f3,
+        8px 8px 15px #a7aaa7,
+        -8px -8px 15px #fff;
+}
 
-      .ezy__signin16-heading {
-        font-weight: 300;
-        font-size: 32px;
-        line-height: 1;
-      }
+.wrapper .name {
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: 1.3px;
+    padding-left: 10px;
+    color: #555;
+}
 
-      .ezy__signin16-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, #005bea, #00c6fb);
-        opacity: 0.8;
-        z-index: -1;
-      }
+.wrapper .form-field input {
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.2rem;
+    color: #666;
+    padding: 10px 15px 10px 10px;
+    /* border: 1px solid red; */
+}
 
-      .ezy__signin16-user-img {
-        width: 200px;
-        height: auto;
-      }
-      /* form */
+.wrapper .form-field {
+    padding-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+}
 
-      .ezy__signin16 .form-control {
-        min-height: 48px;
-        line-height: 45px;
-        background-color: #fff;
-        color: rgba(22, 22, 22, 0.75);
-        border: 0;
-        border-radius: 100px;
-        padding: 0 25px;
-        font-weight: 700;
-      }
-      .ezy__signin16 .form-control::placeholder {
-        font-size: 16px;
-        font-weight: 700;
-      }
-      .ezy__signin16 .form-control:focus {
-        border-color: var(--ezy-theme-color);
-      }
-      /* btn */
-      .ezy__signin16-btn {
-        height: 48px;
-        padding: 10px 30px;
-        font-weight: 600;
-        font-size: 16;
-        line-height: 1.4;
-        background-color: var(--ezy-theme-color);
-        color: #ffffff;
-        border-radius: 100px;
-      }
+.wrapper .form-field .fas {
+    color: #555;
+}
 
-      .ezy__signin16-btn:hover {
-        color: #ffffff;
-        background-color: rgba(var(--ezy-theme-color-rgb), 0.9);
-      }
-      .ezy__signin16 a {
-        text-decoration: none;
-        color: #fff;
-        font-size: 18px;
-        transition: 0.35s;
-      }
-      .ezy__signin16 a:hover {
-        color: var(--ezy-theme-color);
-        font-size: 18px;
-      }
+.wrapper .btn {
+    box-shadow: none;
+    width: 100%;
+    height: 40px;
+    background-color: #03A9F4;
+    color: #fff;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px #b1b1b1,
+        -3px -3px 3px #fff;
+    letter-spacing: 1.3px;
+}
 
+.wrapper .btn:hover {
+    background-color: #039BE5;
+}
+
+.wrapper a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #03A9F4;
+}
+
+.wrapper a:hover {
+    color: #039BE5;
+}
+
+@media(max-width: 380px) {
+    .wrapper {
+        margin: 30px 20px;
+        padding: 40px 15px 15px 15px;
+    }
+}

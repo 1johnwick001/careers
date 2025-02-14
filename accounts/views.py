@@ -1,5 +1,5 @@
 import json
-from django.forms import IntegerField
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect,JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect, render
@@ -112,6 +112,9 @@ class ContactUsView(TemplateView):
     
 class ErrorTemplateView(TemplateView):
     template_name = '404.html'
+    
+# def error_404_view(request, exception):
+#     return render(request, '404.html', status=404)
     
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USER REGISTRATION VIEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
     
@@ -299,7 +302,7 @@ class JobSeekerProfileUpdateView(LoginRequiredMixin, View):
         })
 
     
-#~~~~~~~~~~~~~~~~~~~~ Organisation REGISTRATION VIEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~ Employer / Organisation REGISTRATION VIEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class EmployerOrganisationRegisterView(LoginRequiredMixin,CreateView):
     model = OrganisationRegister
     form_class = OrganisationRegistrationForm
@@ -356,6 +359,55 @@ class EmployerOrganisationUpdateView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, "Please correct the errors below.")
         return super().form_invalid(form)
+    
+class EmployerProfileView(LoginRequiredMixin, TemplateView):
+    template_name = "organisations/employer_profile.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Retrieve the logged-in super user's data based on their role
+        # assuming 'role' is a field in the User model
+        if self.request.user.role == '2':  # Check if user is a Employer
+            employer_user = User.objects.get(id=self.request.user.id)
+            context["employer_user"] = employer_user
+        else:
+            context["error_message"] = "You do not have permission to view this page."
+        
+        return context
+    
+class EmployerProfileUpdateView(LoginRequiredMixin,UpdateView):
+    template_name = "organisations/employer_profile_edit.html"
+    success_url = reverse_lazy("accounts:employer_profile")
+
+    def get(self, request):
+        """Display the profile update form with user details."""
+        user = request.user
+
+        # Pre-fill forms with existing data
+        user_form = UserForm(instance=user)
+
+        return render(request, self.template_name, {
+            "user_form": user_form,
+        })
+
+    def post(self, request):
+        """Handle profile update form submission."""
+        user = request.user
+
+        # Bind forms with submitted data
+        user_form = UserForm(request.POST, request.FILES, instance=user)
+
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, "Your profile has been updated successfully!")
+            return redirect(self.success_url)
+        else:
+            messages.error(request, "Please correct the errors below.")
+
+        return render(request, self.template_name, {
+            "user_form": user_form
+        })    
     
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SUPER ADMIN VIEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class UserListView(View):
@@ -428,7 +480,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     
 class SuperUserProfileUpdateView(LoginRequiredMixin,UpdateView):
     template_name = "super_admin/user_profile_edit.html"
-    success_url = reverse_lazy("accounts:jobseeker_profile_list")
+    success_url = reverse_lazy("accounts:super_profile")
 
     def get(self, request):
         """Display the profile update form with user details."""
@@ -530,8 +582,7 @@ class EmployerJobPostDeleteView(LoginRequiredMixin, DeleteView):
     model = JobPosting
     success_url = reverse_lazy('accounts:employer_job_post_list')
     
-    
-# view for the jobseeker for viewing the detailed view of the job posts 
+#===================view for the jobseeker for viewing the detailed view of the job posts ===========
 class JobSeekerJobDetailView(LoginRequiredMixin, DetailView):
     model = JobPosting
     template_name = 'jobseeker/job_detail.html'
@@ -555,8 +606,7 @@ class JobApplicationSubmitView(LoginRequiredMixin,CreateView):
     def dispatch(self, request, *args, **kwargs):
         # Ensure only job seekers can apply
         if not hasattr(request.user, 'job_seeker_profile'):
-            print("sfhfksjfskjfsnk")
-            return self.handle_no_permission()
+            raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form, *args, **kwargs):

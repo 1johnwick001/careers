@@ -8,18 +8,18 @@
 <div class="modal fade show" id="organizationModal" tabindex="-1" aria-labelledby="organizationModalLabel" aria-modal="true" role="dialog" style="display: block;">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="organizationModalLabel">Organization Registration Required</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title " id="organizationModalLabel">Organization Registration Required!!</h5>
+
             </div>
-            <div class="modal-body">
-                <p>You need to register your organization before you can post jobs.</p>
+            <div class="modal-body bg-danger ">
+                <h6 >You need to register your organization before you can post jobs.</h6>
             </div>
-            <div class="modal-footer">
-                <a href="{% url 'accounts:employer_organisation_resgister' %}" class="btn btn-primary">
+            <div class="modal-footer bg-secondary">
+                <a href="{% url 'accounts:employer_organisation_resgister' %}" class="btn btn-primary w-100">
                     Register Organization
                 </a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Later</button>
+
             </div>
         </div>
     </div>
@@ -78,6 +78,7 @@
                     <div class="col-7">
                         <div class="text-primary p-3">
                             <h5 class="text-primary">Welcome! {{user.username}}</h5>
+                            <p class="text-center">@</p>
                             <p>Career's Dashboard</p>
                         </div>
                     </div>
@@ -91,17 +92,16 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body pt-0">
-                <div class="row">
-                    <div class="col-sm-4">
+            {% comment %} <div class="card-body pt-0">
+                <div class="row"> {% endcomment %}
+                    {% comment %} <div class="col-sm-6">
                         <div class="avatar-md profile-user-wid mb-4">
                             <img src="assets/images/users/avatar-1.jpg" alt="" class="img-thumbnail rounded-circle">
                         </div>
-                        <h5 class="font-size-15 text-truncate">John Wick</h5>
-                        <p class="text-muted mb-0 text-truncate">Continental University</p>
-                    </div>
+                        <h5 class="font-size-15 text-truncate">{{user.username}}</h5>
+                    </div> {% endcomment %}
 
-                    <div class="col-sm-8">
+                    {% comment %} <div class="col-sm-6">
                         {% if user.role == "1" %}
                         <div class="pt-3">
                             <div class="mt-4">
@@ -123,9 +123,9 @@
                             </div>
                         </div>
                         {% endif %}
-                    </div>
-                </div>
-            </div>
+                    </div> {% endcomment %}
+                {% comment %} </div> {% endcomment %}
+            {% comment %} </div> {% endcomment %}
         </div>
         
     </div>
